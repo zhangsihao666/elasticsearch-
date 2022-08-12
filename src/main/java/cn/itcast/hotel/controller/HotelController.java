@@ -97,6 +97,7 @@ public class HotelController {
           request.source().sort(SortBuilders.geoDistanceSort("location",new GeoPoint(location)).
                   order(SortOrder.ASC).unit(DistanceUnit.KILOMETERS));
       }
+      //测试
 
 //     request.source().query(builder);
       request.source().query(QueryBuilders.

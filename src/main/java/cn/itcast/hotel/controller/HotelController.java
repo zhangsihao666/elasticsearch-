@@ -6,16 +6,21 @@ import cn.itcast.hotel.pojo.RequestParams;
 import cn.itcast.hotel.pojo.Result;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.lucene.queries.function.FunctionScoreQuery;
 import org.apache.lucene.search.SortField;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.geo.GeoPoint;
+import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilder;
+import org.elasticsearch.index.query.functionscore.ScoreFunctionBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.sort.SortBuilder;
@@ -92,7 +97,18 @@ public class HotelController {
           request.source().sort(SortBuilders.geoDistanceSort("location",new GeoPoint(location)).
                   order(SortOrder.ASC).unit(DistanceUnit.KILOMETERS));
       }
-     request.source().query(builder);
+
+//     request.source().query(builder);
+      request.source().query(QueryBuilders.
+              functionScoreQuery(builder,new FunctionScoreQueryBuilder.FilterFunctionBuilder[] {
+                      new FunctionScoreQueryBuilder.FilterFunctionBuilder(
+                              QueryBuilders.termQuery("isAD","true"),
+                              ScoreFunctionBuilders.weightFactorFunction(100)
+                      )
+                      }
+                      ).boostMode(CombineFunction.AVG));
+      //给广告加权值
+
 
         request.source().from((page-1)*size).size(size);
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
@@ -122,6 +138,7 @@ public class HotelController {
                 if(sortValues.length>0){
                     hotelDoc.setDistance(sortValues[0]);
                 }
+                System.out.println(item.getScore());
             });
         }
     result.setHotels(hotels);

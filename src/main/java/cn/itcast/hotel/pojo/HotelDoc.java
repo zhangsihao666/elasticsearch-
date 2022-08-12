@@ -18,6 +18,8 @@ public class HotelDoc {
     private String location;
     private String pic;
     private Object distance;
+    private boolean isAD;
+
 
     public HotelDoc(Hotel hotel) {
         this.id = hotel.getId();

@@ -1,7 +1,17 @@
 package cn.itcast.hotel.DSL;
 
+import org.apache.lucene.analysis.miscellaneous.StemmerOverrideFilter;
+
 public class hotel {
     public static  final String HOTEL_INSERT="";
+    public static  final String HOTEL_POST=" \"mappings\": \n" +
+            "{\n" +
+            "  \"properties\":{\n" +
+            "    \"isAD\":{\n" +
+            "      \"type\":\"keyword\"\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
     public static final String HOTEL_createIndexDSL="{\n" +
             "\"mappings\":{\n" +
             "  \"properties\":{\n" +

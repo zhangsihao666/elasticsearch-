@@ -11,6 +11,7 @@ import org.apache.http.HttpHost;
 import org.apache.lucene.search.TotalHits;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequestBuilder;
+import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -45,8 +46,7 @@ import javax.swing.text.Highlighter;
 import java.io.IOException;
 import java.util.*;
 
-import static cn.itcast.hotel.DSL.hotel.HOTEL_createIndexDSL;
-import static cn.itcast.hotel.DSL.hotel.HOTEL_createIndexDSL;
+import static cn.itcast.hotel.DSL.hotel.*;
 
 @SpringBootTest
 class HotelDemoApplicationTests {
@@ -77,6 +77,13 @@ private HotelService hotelService;
 
     }
     @Test
+    void updateIndex() throws IOException {
+      PutMappingRequest request=new PutMappingRequest("hotel");
+      request.source(HOTEL_POST,XContentType.JSON);
+      client.indices().putMapping(request,RequestOptions.DEFAULT);
+
+    }
+    @Test
    void isExist() throws IOException {
         GetIndexRequest request=new GetIndexRequest("hotel");
         boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
@@ -102,8 +109,8 @@ private HotelService hotelService;
     }
     @Test
     void updateDoc() throws IOException {
-        UpdateRequest request = new UpdateRequest("hotel","36934");
-        request.doc("name","老八酒店");
+        UpdateRequest request = new UpdateRequest("hotel","394617");
+        request.doc("isAD","true");
         client.update(request,RequestOptions.DEFAULT);
     }
     @Test
@@ -138,7 +145,7 @@ private HotelService hotelService;
     void TestMatch() throws IOException {
         SearchRequest request=new SearchRequest("hotel");
 //        request.source().query(QueryBuilders.matchAllQuery());
-        request.source().query(QueryBuilders.matchQuery("all","7天"));
+        request.source().query(QueryBuilders.matchQuery("isAD","true"));
         SearchResponse response=client.search(request,RequestOptions.DEFAULT);
         //解析结果
         parseResponse(response);

@@ -1,6 +1,7 @@
 package cn.itcast.hotel.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Hotel {
     private Integer score;
     private String brand;
     private String city;
+
     private String starName;
     private String business;
     private String longitude;

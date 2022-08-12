@@ -31,7 +31,7 @@ public class hotel {
             "      \"type\":\"keyword\",\n" +
             "      \"copy_to\":\"all\"\n" +
             "    },\n" +
-            "    \"start_name\":{\n" +
+            "    \"starName\":{\n" +
             "      \"type\":\"keyword\",\n" +
             "      \"copy_to\":\"all\"\n" +
             "    },\n" +
